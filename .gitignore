@@ -1,0 +1,4 @@
+.env
+img
+docker-compose.yml
+/data
