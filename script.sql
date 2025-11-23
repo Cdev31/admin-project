@@ -1,3 +1,5 @@
+-- EJECUTAR PRIMERO datagen.py PARA GENERAR DATOS!!!
+
 USE master;
 GO
 
