@@ -2,3 +2,6 @@
 img
 docker-compose.yml
 /data
+venv
+fill_data.py
+initial_data/*
