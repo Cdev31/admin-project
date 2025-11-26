@@ -32,6 +32,16 @@ GO
 
 PRINT 'Creando base de datos...';
 
+-- Se activa el valor de autenticación de DB contenida
+EXEC sp_configure 'show advanced', 1;
+GO
+RECONFIGURE;
+GO
+EXEC sp_configure 'contained database authentication', 1;
+GO
+RECONFIGURE;
+GO
+
 CREATE DATABASE Gym_DB
 ON PRIMARY(
     NAME = gym_db_data,
@@ -51,6 +61,10 @@ GO
 
 ALTER DATABASE Gym_DB
 ADD FILEGROUP Gym_History_FG;
+GO
+
+ALTER DATABASE Gym_DB
+SET CONTAINMENT = PARTIAL;
 GO
 
 ALTER DATABASE Gym_DB
@@ -205,3 +219,71 @@ CREATE TABLE payment (
     CONSTRAINT fk_payment_payment_method FOREIGN KEY (payment_method_id) REFERENCES payment_method(payment_method_id)
 );
 GO
+
+-- Creacion de vistas
+
+-- VISTA 1: Análisis Financiero (Ingresos por Mes y Método de Pago)
+-- Objetivo: Alimentar un gráfico de barras o líneas de tendencia.
+CREATE OR ALTER VIEW vw_Dashboard_Ingresos
+AS
+SELECT 
+    FORMAT(p.payment_date, 'yyyy-MM') AS Mes_Anio,
+    YEAR(p.payment_date) AS Anio,
+    MONTH(p.payment_date) AS Mes_Numero,
+    DATENAME(MONTH, p.payment_date) AS Mes_Nombre,
+    pm.method_name AS Metodo_Pago,
+    COUNT(p.payment_id) AS Cantidad_Transacciones,
+    SUM(p.amount) AS Total_Ingresos
+FROM payment p
+INNER JOIN payment_method pm ON p.payment_method_id = pm.payment_method_id
+GROUP BY 
+    FORMAT(p.payment_date, 'yyyy-MM'),
+    YEAR(p.payment_date),
+    MONTH(p.payment_date),
+    DATENAME(MONTH, p.payment_date),
+    pm.method_name;
+GO
+
+-- VISTA 2: Operaciones (Ocupación y Asistencia de Clases)
+-- Objetivo: Alimentar un gráfico circular (Pie Chart) de asistencia y barras de clases populares.
+CREATE OR ALTER VIEW vw_Dashboard_Clases
+AS
+SELECT 
+    c.class_name AS Nombre_Clase,
+    c.class_type AS Tipo_Clase, -- Group / Personal
+    r.room_name AS Sala,
+    COUNT(res.reservation_id) AS Total_Reservas,
+    SUM(CASE WHEN res.attended = 1 THEN 1 ELSE 0 END) AS Total_Asistencias,
+    SUM(CASE WHEN res.attended = 0 THEN 1 ELSE 0 END) AS Ausencias,
+    CAST(
+        (SUM(CASE WHEN res.attended = 1 THEN 1 ELSE 0 END) * 100.0) / NULLIF(COUNT(res.reservation_id), 0) 
+    AS DECIMAL(5,2)) AS Tasa_Asistencia_Porcentaje
+FROM class_schedule cs
+INNER JOIN class c ON cs.class_id = c.class_id
+INNER JOIN room r ON cs.room_id = r.room_id
+LEFT JOIN reservation res ON cs.class_schedule_id = res.class_schedule_id
+GROUP BY 
+    c.class_name, 
+    c.class_type,
+    r.room_name;
+GO
+
+-- VISTA 3: Recursos Humanos (Actividad de Entrenadores)
+-- Objetivo: Alimentar un gráfico de ranking de entrenadores.
+CREATE OR ALTER VIEW vw_Dashboard_Entrenadores
+AS
+SELECT 
+    t.first_name + ' ' + t.last_name AS Entrenador,
+    t.specialty AS Especialidad,
+    COUNT(cs.class_schedule_id) AS Clases_Impartidas,
+    COUNT(res.reservation_id) AS Alumnos_Atendidos_Total
+FROM trainer t
+LEFT JOIN class_schedule cs ON t.trainer_id = cs.trainer_id
+LEFT JOIN reservation res ON cs.class_schedule_id = res.class_schedule_id
+WHERE t.is_active = 1
+GROUP BY 
+    t.first_name, 
+    t.last_name, 
+    t.specialty;
+GO
+
