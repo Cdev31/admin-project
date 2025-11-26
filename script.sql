@@ -49,6 +49,21 @@ LOG ON (
 );
 GO
 
+ALTER DATABASE Gym_DB
+ADD FILEGROUP Gym_History_FG;
+GO
+
+ALTER DATABASE Gym_DB
+ADD FILE (
+    NAME = gym_db_history,
+    FILENAME = 'C:\SQL_Backups\gym_db_history.ndf',
+    SIZE = 20MB,
+    MAXSIZE = 100MB,
+    FILEGROWTH = 10MB
+)
+TO FILEGROUP Gym_History_FG;
+GO
+
 USE Gym_DB;
 GO
 
