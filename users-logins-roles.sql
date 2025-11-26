@@ -32,6 +32,7 @@ CREATE ROLE payment_manager_rol;
 CREATE ROLE trainer_manager_rol;
 CREATE ROLE receptionist_rol;
 CREATE ROLE auditor_rol;
+CREATE ROLE lector_reportes_rol;
 
 -- Creacion de usuarios
 CREATE USER admin_general_gym_user FOR LOGIN admin_general_lg;
@@ -40,6 +41,7 @@ CREATE USER payment_manager_user FOR LOGIN manager_payments_lg;
 CREATE USER trainer_manager_user FOR LOGIN manager_trainers_lg;
 CREATE USER receptionist_manager_user FOR LOGIN manager_receptionist_lg;
 CREATE USER auditor_user FOR LOGIN manager_auditor_lg;
+CREATE USER PowerBI_user WITH PASSWORD = 'PowerBI_1234!';
 
 -- Asignacion de usuarios a roles
 ALTER ROLE general_manager_rol ADD MEMBER admin_general_gym_user;
@@ -48,6 +50,7 @@ ALTER ROLE payment_manager_rol ADD MEMBER payment_manager_user;
 ALTER ROLE trainer_manager_rol ADD MEMBER trainer_manager_user;
 ALTER ROLE receptionist_rol ADD MEMBER receptionist_manager_user;
 ALTER ROLE auditor_rol ADD MEMBER auditor_user;
+ALTER ROLE lector_reportes_rol ADD MEMBER PowerBI_user;
 
 -- ASIGNACION DE PERMISOS
 
@@ -78,3 +81,8 @@ GRANT INSERT, UPDATE ON dbo.reservation TO receptionist_rol;
 
 -- Auditor
 GRANT SELECT ON SCHEMA::dbo TO auditor_rol;
+
+-- PowerBI
+GRANT SELECT ON dbo.vw_Dashboard_Ingresos TO lector_reportes_rol;
+GRANT SELECT ON dbo.vw_Dashboard_Clases TO lector_reportes_rol;
+GRANT SELECT ON dbo.vw_Dashboard_Entrenadores TO lector_reportes_rol;
