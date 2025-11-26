@@ -1,4 +1,8 @@
---indices
+-- Indices
+
+USE Gym_DB;
+GO
+
 -- 1. indice para busquedas por nombre de miembro
 CREATE NONCLUSTERED INDEX IX_member_name
 ON member (first_name, last_name);
@@ -65,7 +69,7 @@ SELECT
 FROM payment p;
 GO
 
--- 4. muestra las clases más reservadas
+-- 4. muestra las clases mï¿½s reservadas
 SELECT
     cs.class_schedule_id,
     COUNT(r.reservation_id) AS TotalReservas,
@@ -109,7 +113,7 @@ SET receipt_number = NEXT VALUE FOR Seq_ReceiptNumber
 WHERE receipt_number IS NULL;
 GO
 
--- 4. inserción usando la secuencia
+-- 4. inserciï¿½n usando la secuencia
 INSERT INTO payment (member_id, member_membership_id, payment_method_id, amount, receipt_number)
 VALUES (1, NULL, 1, 25.00, NEXT VALUE FOR Seq_ReceiptNumber);
 GO
