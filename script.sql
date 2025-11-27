@@ -230,7 +230,7 @@ SELECT
     FORMAT(p.payment_date, 'yyyy-MM') AS Mes_Anio,
     YEAR(p.payment_date) AS Anio,
     MONTH(p.payment_date) AS Mes_Numero,
-    DATENAME(MONTH, p.payment_date) AS Mes_Nombre,
+    UPPER(LEFT(FORMAT(p.payment_date, 'MMMM', 'es-ES'), 1)) + LOWER(SUBSTRING(FORMAT(p.payment_date, 'MMMM', 'es-ES'), 2, LEN(FORMAT(p.payment_date, 'MMMM', 'es-ES')))) AS Mes_Nombre,
     pm.method_name AS Metodo_Pago,
     COUNT(p.payment_id) AS Cantidad_Transacciones,
     SUM(p.amount) AS Total_Ingresos
@@ -240,7 +240,7 @@ GROUP BY
     FORMAT(p.payment_date, 'yyyy-MM'),
     YEAR(p.payment_date),
     MONTH(p.payment_date),
-    DATENAME(MONTH, p.payment_date),
+    FORMAT(p.payment_date, 'MMMM', 'es-ES'),
     pm.method_name;
 GO
 
