@@ -9,7 +9,7 @@ GO
 
 -- Definici�n de variables para el nombre din�mico del archivo
 DECLARE @fecha VARCHAR(20) = CONVERT(VARCHAR(20), GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR(20), GETDATE(), 108), ':', '');
-DECLARE @nombreArchivo VARCHAR(255) = 'C:\backups\GymDB_FULL_' + @fecha + '.bak';
+DECLARE @nombreArchivo VARCHAR(255) = 'C:\SQL_Backups\GymDB_FULL_' + @fecha + '.bak';
 DECLARE @nombreBackup VARCHAR(255) = 'Gym_DB Database Backup';
 
 BACKUP DATABASE Gym_DB 
@@ -24,7 +24,7 @@ GO
 
 -- Variables de fecha y nombre
 DECLARE @fecha VARCHAR(20) = CONVERT(VARCHAR(20), GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR(20), GETDATE(), 108), ':', '');
-DECLARE @nombreArchivo VARCHAR(255) = 'C:\backups\GymDB_DIFF_' + @fecha + '.bak';
+DECLARE @nombreArchivo VARCHAR(255) = 'C:\SQL_Backups\GymDB_DIFF_' + @fecha + '.bak';
 DECLARE @nombreBackup VARCHAR(255) = 'Gym_DB-Differential Database Backup';
 
 BACKUP DATABASE Gym_DB
@@ -39,7 +39,7 @@ GO
 
 -- Variables de fecha y nombre
 DECLARE @fecha VARCHAR(20) = CONVERT(VARCHAR(20), GETDATE(), 112) + '_' + REPLACE(CONVERT(VARCHAR(20), GETDATE(), 108), ':', '');
-DECLARE @nombreArchivo VARCHAR(255) = 'C:\backups\Gym_DB_LOG_' + @fecha + '.trn'; 
+DECLARE @nombreArchivo VARCHAR(255) = 'C:\SQL_Backups\Gym_DB_LOG_' + @fecha + '.trn'; 
 DECLARE @nombreBackup VARCHAR(255) = 'Gym_DB-Transaction Log Backup';
 
 BACKUP LOG Gym_DB

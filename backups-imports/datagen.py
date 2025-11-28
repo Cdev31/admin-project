@@ -7,13 +7,13 @@ import os
 import pandas as pd
 
 fake = Faker('es_ES') # Datos en español
-NUM_MEMBERS = 200
-NUM_TRAINERS = 10
-NUM_ROOMS = 5
-NUM_CLASSES = 15
-NUM_SCHEDULES = 50
-NUM_RESERVATIONS = 300
-NUM_PAYMENTS = 400
+NUM_MEMBERS = 1000
+NUM_TRAINERS = 50
+NUM_ROOMS = 20
+NUM_CLASSES = 50
+NUM_SCHEDULES = 100
+NUM_RESERVATIONS = 600
+NUM_PAYMENTS = 3000
 
 OUTPUT_DIR = 'C:/SQL_Backups/DataImport' # Carpeta donde SQL Server buscará los archivos
 if not os.path.exists(OUTPUT_DIR):
